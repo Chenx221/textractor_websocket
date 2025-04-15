@@ -50,10 +50,10 @@ pub extern "C" fn OnNewSentence(
     let current_select = sentence_info.get_current_select();
     let text_number = sentence_info.get_text_number();
     if let CurrentSelect::UserSelectedTextThread(_) = current_select {
-        if let TextNumber::TextThread(_) = text_number {
+        if matches!(text_number, TextNumber::TextThread(_) | TextNumber::Clipboard) {
             SERVER
-                .get_or_init(start_websocket_server)
-                .send_message(sentence_as_lossy_string.into());
+            .get_or_init(start_websocket_server)
+            .send_message(sentence_as_lossy_string.into());
         }
     }
 
